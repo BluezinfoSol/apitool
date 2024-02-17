@@ -24,6 +24,8 @@ import useCaveStore from '@/src/Store';
 import axios from 'axios';
 import { Delete, RefreshCcw, Trash } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useToast } from "@/components/ui/use-toast"
+
 
 export interface Cave1Props {
 }
@@ -36,6 +38,8 @@ export default function Cave1 (props: Cave1Props) {
   const [country, setCountry] = useState<string>('');
 
   const { orderdata } = useCaveStore();
+
+  const { toast } = useToast();
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
@@ -74,6 +78,14 @@ export default function Cave1 (props: Cave1Props) {
 
   const handleGetNumberClick = async () => {
     try {
+        if(apiKey===null || apiKey==="" || apiKey===undefined) {
+          toast({
+            variant: "destructive",
+            title: "Please enter the API Key",
+            description: "",
+          })
+          return false;
+        }
         const response = await axios.post('/api/cave1', {
             apiKey,
             service,
@@ -153,6 +165,7 @@ export default function Cave1 (props: Cave1Props) {
           id='apikey'
           value={apiKey}
           onChange={handleApiKeyChange}
+          placeholder={'Enter API Key'}
         />
         <Select onValueChange={handleServiceChange}>
             <SelectTrigger className="w-[180px]">
@@ -161,7 +174,6 @@ export default function Cave1 (props: Cave1Props) {
             <SelectContent>
                 <SelectGroup>
                 <SelectLabel>Service</SelectLabel>
-                <SelectItem value="mb">Yahoo</SelectItem>
                 <SelectItem value="mb">Yahoo</SelectItem>
                 <SelectItem value="mm">Microsoft</SelectItem>
                 <SelectItem value="ig">Instagram</SelectItem>
