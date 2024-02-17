@@ -118,26 +118,33 @@ export default function Cave1 (props: Cave1Props) {
       apiKey: apiKey,
       orderId: orderId,
       status: status
-    });
-    if(status=='cancel') {
+    }).then((res)=> {
+      if(status=='cancel') {
 
-      const confirmDelete = window.confirm('Are you sure you want to cancel this order?');
-      if (confirmDelete) {
-        // Remove the order from Zustand store
+        const confirmDelete = window.confirm('Are you sure you want to cancel this order?');
+        if (confirmDelete) {
+          // Remove the order from Zustand store
+          useCaveStore.setState((state) => ({
+            orderdata: state.orderdata.filter((o) => o.orderid !== orderId),
+          }));
+        }
+  
+      } else {
+        const newCode = '';
+        // Update the code in Zustand store for the corresponding order ID
         useCaveStore.setState((state) => ({
-          orderdata: state.orderdata.filter((o) => o.orderid !== orderId),
+          orderdata: state.orderdata.map((o) =>
+            o.orderid === orderId ? { ...o, code: newCode } : o
+          ),
         }));
+        toast({
+          variant: "default",
+          title: "One More Code Activated",
+          description: "",
+        })
       }
-
-    } else {
-      const newCode = codeResponse.data.data;
-      // Update the code in Zustand store for the corresponding order ID
-      useCaveStore.setState((state) => ({
-        orderdata: state.orderdata.map((o) =>
-          o.orderid === orderId ? { ...o, code: newCode } : o
-        ),
-      }));
-    }
+    });
+    
   }
 
   const handleBeforeUnload = (event: BeforeUnloadEvent) => {
