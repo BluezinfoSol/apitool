@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
         const data = await response.text();
         if (data !== "") {
             const accessnumber = data.split(':');
-            const activate = await fetch(`https://smshub.org/stubs/handler_api.php?api_key=${req.apiKey}&action=setStatus&status=STATUS&id=${accessnumber[1]}`);
+            const activate = await fetch(`https://smshub.org/stubs/handler_api.php?api_key=${req.apiKey}&action=setStatus&status=1&id=${accessnumber[1]}`);
             if (!activate.ok) {
                 throw new Error(`Failed to set status: ${activate.statusText}`);
             }
