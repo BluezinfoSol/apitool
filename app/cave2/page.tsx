@@ -98,20 +98,28 @@ export default function Cave2 (props: Cave2Props) {
             country,
             operator,
         });
-        const accessnumber = response.data.data.split(':');
-        const newOrderId = accessnumber[1];
-        const newNumber = accessnumber[2];
-        
-        useCave2Store.setState((state)=>({
-          orderdata: [
-            ...state.orderdata,
-            {
-              orderid: newOrderId,
-              number: newNumber,
-              code: []
-            }
-          ]
-        }));
+        if(response.data.data!=='NO_NUMBERS') {
+          const accessnumber = response.data.data.split(':');
+          const newOrderId = accessnumber[1];
+          const newNumber = accessnumber[2];
+          
+          useCave2Store.setState((state)=>({
+            orderdata: [
+              ...state.orderdata,
+              {
+                orderid: newOrderId,
+                number: newNumber,
+                code: []
+              }
+            ]
+          }));
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: "No Numbers!",
+          })
+        }
         // Assuming the API response contains the balance, update the state
         //setBalance(response.data.balance);
     } catch (error) {
@@ -496,7 +504,7 @@ export default function Cave2 (props: Cave2Props) {
               <TableRow key={order.orderid}>
                 <TableCell className='px-6 py-4 whitespace-nowrap'>{order.orderid}</TableCell>
                 <TableCell className='px-6 py-4 whitespace-nowrap'>{order.number}</TableCell>
-                <TableCell className='px-6 py-4 whitespace-nowrap'>{order.code.length > 0 ? order.code.join("\n") : ''}</TableCell>
+                <TableCell className='px-6 py-4 whitespace-nowrap'>{order.code.length > 0 ? order.code.map(item=>item.code).join("\n") : ''}</TableCell>
                 <TableCell className='px-6 py-4 whitespace-nowrap space-x-4'>
                   <Button onClick={()=>handleNumberClick(order.orderid,'ban')} title='Ban'><Ban /></Button>
                   <Button onClick={()=>handleNumberClick(order.orderid,'cancel')} title='Cancel'><Trash /></Button>
