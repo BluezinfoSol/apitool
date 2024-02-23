@@ -46,6 +46,13 @@ export function SidebarNav (props: SidebarNavProps) {
                 variant: "default",
                 href: "/cave3"
               },
+              {
+                title: "Cave 4",
+                label: "",
+                icon: LayoutDashboard,
+                variant: "default",
+                href: "/cave4"
+              },
             ]}
         />
     </div>
