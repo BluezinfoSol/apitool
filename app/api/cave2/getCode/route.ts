@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     const response = await fetch(`https://api1.5sim.net/stubs/handler_api.php?api_key=${apiKey}&action=getStatus&id=${orderId}`);
     const data = await response.text();
     return NextResponse.json({ data: data, message: "success" });
-}
+} //test
 
 export async function POST(request: NextRequest) {
     const req = await request.json();
